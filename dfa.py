@@ -8,6 +8,9 @@ def compose_functions(f: Callable, g: Callable) -> Callable:
         return g(f(x))
     return fog
 
+def or_function(v1: bool, v2: bool)-> bool:
+    return v1 or v2
+
 def deterministic_automate(sigma: Set[chr],
                            delta: Dict[Tuple[chr,str], str],
                            f: Set[str],
@@ -31,8 +34,8 @@ def deterministic_automate(sigma: Set[chr],
         return compose_delta_transitions(
             create_delta_transitions(word))(s) in F
 
-    if next(k not in sigma for k,v in delta.keys()):
-        raise Exception('char not in delta')
+    if reduce(or_function ,(k not in sigma for k,v in delta.keys())):
+        raise Exception('char in delta is not in sigma')
     return evaluate
 
 
