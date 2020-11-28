@@ -44,26 +44,25 @@ def turing_machine(sigma: Set[chr],
                         new_state,
                         iter_num + 1)
 
-
     if reduce(or_function, (k not in gamma for k, v in delta.keys())):
         raise Exception('char in delta is not in sigma')
     return evaluate_word
 
 if __name__ == "__main__":
 
-    MT = {('0', 's') : ('0', 's', 1),
+    delta = {('0', 's') : ('0', 's', 1),
           ('1', 's') : ('1', 's', 1),
           ('@', 's') : ('@', 't', -1),
           ('0', 't') : ('0', 'Si', 0)
           }
 
-    stri = '01111'
+    stri = '011110'
     sigma = {'1','0'}
     b = '@'
     gamma = {b} | sigma
     f = {'Si'}
     s = 's'
 
-    tm = turing_machine(sigma,gamma,b,MT,f,s)
+    tm = turing_machine(sigma,gamma,b,delta,f,s)
     result = tm(stri)
     print(result)
