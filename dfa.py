@@ -19,16 +19,18 @@ def deterministic_automate(sigma: Set[chr],
         print(f'{state} , {char} : {delta.get((state,char), "_")}')
         return delta.get((state,char), "_")
 
-    def delta_curr(char:chr) -> Callable[[str],str]:
+    def partial_delta(char:chr) -> Callable[[str],str]:
         def delta_eval(state:str) -> str:
             return delta_fn(state, char)
         return delta_eval
 
+    # d(q,s) -> q_1 => d(q_1, s_1) ::  p(s, d) -> dp  :: dp(q) -> q_1 => dp(q_1) => ...
+    # f(x) -> y => g(y) -> z : fog(x) -> z
     def compose_delta_transitions(functions: Iterable[Callable]) -> Callable:
         return reduce(compose_functions, functions)
 
     def create_delta_transitions(word: str) -> Iterable[Callable[[str],str]]:
-        return (delta_curr(char) for char in word) if len(word) > 0 else (lambda x: x, lambda x : x)
+        return (partial_delta(char) for char in word) if len(word) > 0 else (lambda x: x, lambda x : x)
 
     def evaluate(word: str) -> bool:
         return compose_delta_transitions(
@@ -40,14 +42,13 @@ def deterministic_automate(sigma: Set[chr],
 
 
 if __name__ == '__main__':
+
     # (b(a|b)*b)|""
     delta_dict = {
         ("q0", 'a'): "q1" ,
         ("q0", 'b'): "q1" ,
-        ("q1", 'a'): "q2" ,
-        ("q1", 'b'): "q2" ,
-        ("q2", 'a'): "q3" ,
-        ("q2", 'b'): "q3" ,
+        ("q1", 'a'): "q3" ,
+        ("q1", 'b'): "q3" ,
         ("q3", 'a'): "q0" ,
         ("q3", 'b'): "q0"
     }
