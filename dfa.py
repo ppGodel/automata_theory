@@ -45,19 +45,24 @@ def deterministic_automate(
 
 if __name__ == "__main__":
 
-    # a*b)|""
+    # a*b
     delta_dict = {
-        ("q0", "a"): "q0",
+        ("q0", "a"): "qx",
         ("q0", "b"): "q1",
+        ("q1", "a"): "q1",
+        ("q1", "b"): "q2",
+        ("q2", "a"): "q1",
+        ("q2", "b"): "q2",
+        ("qx", "a"): "qx",
+        ("qx", "b"): "qx",
     }
     sigma = {"a", "b"}
-    F = {"q1"}
+    F = {"q2"}
     s = "q0"
     da = deterministic_automate(sigma, delta_dict, F, s)
-    print(da("ab"))
-    print(da("aaaab"))
+    print(da("baab"))
+    print(da("baaaab"))
     print(da("bbbbbbbbbbbbbb"))
-    print(da("bbbbbbbbbbbbbbbb"))
-    print(da("aaaaab"))
+    print(da("aaaaaba"))
     print(da(""))
     print(da("b"))
