@@ -27,16 +27,19 @@ def deterministic_automate(
 
         return delta_eval
 
-    # d(q,s) -> q_1 => d(q_1, s_1) ::  p(s, d) -> dp  :: dp(q) -> q_1 => dp(q_1) => ...
+    # d(q,s) -> q_1 => d(q_1, s_1) ::  p(s, d) -> dp
+    # :: dp(q) -> q_1 => dp(q_1) => ...
     # f(x) -> y => g(y) -> z : fog(x) -> z
     def compose_delta_transitions(functions: Iterable[Callable]) -> Callable:
         return reduce(compose_functions, functions)
 
     def create_delta_transitions(word: str) -> Iterable[Callable[[str], str]]:
-        return map(partial_delta, word) if len(word) > 0 else (lambda x: x, lambda x: x)
+        return map(partial_delta, word) if len(word) > 0 \
+            else (lambda x: x, lambda x: x)
 
     def evaluate(word: str) -> bool:
-        return compose_delta_transitions(create_delta_transitions(word))(s) in F
+        return compose_delta_transitions(create_delta_transitions(word))(s) \
+            in F
 
     if reduce(or_function, (v not in sigma for k, v in delta.keys())):
         raise Exception("char in delta is not in sigma")
@@ -45,7 +48,7 @@ def deterministic_automate(
 
 if __name__ == "__main__":
 
-    # a*b
+    # b(aUb)*
     delta_dict = {
         ("q0", "a"): "qx",
         ("q0", "b"): "q1",
