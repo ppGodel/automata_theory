@@ -1,12 +1,6 @@
 #!/usr/bin/env python3.7
 from functools import reduce
-from typing import Callable, Dict, Set, Tuple, Any
-
-
-def compose_functions(f: Callable, g: Callable) -> Callable:
-    def fog(x: Any) -> Any:
-        return g(f(x))
-    return fog
+from typing import Dict, Set, Tuple
 
 
 def or_function(v1: bool, v2: bool) -> bool:
@@ -37,7 +31,7 @@ def turing_machine(sigma: Set[chr],
         if word[-1] != b or head_position >= len(word):
             evaluate(word + b, head_position, state, iter_num)
         print(f'w: {word[:head_position]}|{word[head_position]}|{word[head_position+1:]}')
-        (new_state, new_char,  direction) = delta_fn(state, word[head_position])
+        (new_state, new_char, direction) = delta_fn(state, word[head_position])
         if new_state == "q_i" or iter_num > max_iter:
             return "Rejected"
         if new_state in f:
@@ -55,26 +49,14 @@ def turing_machine(sigma: Set[chr],
 if __name__ == "__main__":
 
     delta = {
-          ('s', '0'): ('s', '0', 1),
-          ('s', '1'): ('s', '1', 1),
-          ('s', '2'): ('s', '2', 1),
-          ('s', '3'): ('s', '3', 1),
-          ('s', '4'): ('s', '4', 1),
-          ('s', '5'): ('s', '5', 1),
-          ('s', '6'): ('s', '6', 1),
-          ('s', '7'): ('s', '7', 1),
-          ('s', '8'): ('s', '8', 1),
-          ('s', '9'): ('s', '9', 1),
+          ('s', 'a'): ('s', 'a', 1),
+          ('s', 'b'): ('s', 'b', 1),
           ('s', '@'): ('t', '@', -1),
-          ('t', '1'): ('Si', '0', 0),
-          ('t', '3'): ('Si', '0', 0),
-          ('t', '5'): ('Si', '0', 0),
-          ('t', '7'): ('Si', '0', 0),
-          ('t', '9'): ('Si', '0', 0)
+          ('t', 'b'): ('Si', 'b', 0),
           }
 
-    stri = '11118'
-    sigma = {'1', '0', '2', '3', '4', '5', '6', '7', '8', '9'}
+    stri = 'ababaaaba'
+    sigma = {'a', 'b'}
     b = '@'
     gamma = {b} | sigma
     f = {'Si'}
@@ -82,8 +64,7 @@ if __name__ == "__main__":
 
     tm = turing_machine(sigma, gamma, b, delta, f, s)
     # print(tm(stri))
-    # print(tm('12123'))
-
+    # a^nb^n
     delta2 = {
         ('q_0', 'a'): ('q_1', 'A', 1),
         ('q_0', 'b'): ('q_x', 'b', 0),
@@ -107,7 +88,7 @@ if __name__ == "__main__":
         ('q_3', 'B'): ('q_3', 'B', 1),
     }
 
-    stri = 'aaaabbbb'
+    stri = 'aaaaaabbbbbb'
     sigma = {'a', 'b'}
     b = '&'
     gamma = {b, 'A', 'B'} | sigma
