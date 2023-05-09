@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.7
+#!/usr/bin/env python3
 from functools import reduce
 from typing import Dict, Set, Tuple
 
@@ -34,7 +34,7 @@ def turing_machine(sigma: Set[chr],
         (new_state, new_char, direction) = delta_fn(state, word[head_position])
         if new_state == "q_i" or iter_num > max_iter:
             return "Rejected"
-        if new_state in f:
+        if new_state in f and direction == 0:
             return "Accepted"
         return evaluate(word[:head_position] + new_char + word[head_position+1:],
                         head_position + direction,
@@ -55,14 +55,14 @@ if __name__ == "__main__":
           ('t', 'b'): ('Si', 'b', 0),
           }
 
-    stri = 'ababaaaba'
+    stri = 'ababaaabab'
     sigma = {'a', 'b'}
     b = '@'
     gamma = {b} | sigma
     f = {'Si'}
     s = 's'
 
-    tm = turing_machine(sigma, gamma, b, delta, f, s)
+    # tm = turing_machine(sigma, gamma, b, delta, f, s)
     # print(tm(stri))
     # a^nb^n
     delta2 = {
